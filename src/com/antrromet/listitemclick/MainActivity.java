@@ -9,9 +9,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity implements OnClickListener,
+		OnItemClickListener {
 
 	private ListView mListView;
 	private ListAdapter mAdapter;
@@ -25,8 +29,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		prepareDummyPeople();
 		mAdapter = new ListAdapter(mPeople, this);
 		mListView.setAdapter(mAdapter);
+		mListView.setOnItemClickListener(this);
 	}
 
+	/**
+	 * Prepares the list with dummy set of data
+	 */
 	private void prepareDummyPeople() {
 		mPeople = new ArrayList<Person>();
 		Person person;
@@ -100,6 +108,16 @@ public class MainActivity extends Activity implements OnClickListener {
 		Intent msgIntent = new Intent(Intent.ACTION_VIEW);
 		msgIntent.setData(Uri.parse("sms:" + number));
 		startActivity(msgIntent);
+	}
+
+	/*
+	 * The list item click will work only when the buttons are set to not taking
+	 * focus by setting focusable as false
+	 */
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		Toast.makeText(this, mPeople.get(arg2).getName() + " Clicked",
+				Toast.LENGTH_SHORT).show();
 	}
 
 }
